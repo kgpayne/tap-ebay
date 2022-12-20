@@ -15,22 +15,19 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 class FindingStream(eBayStream):
     """Define custom stream."""
 
+    name = "finding_items"
     primary_keys = ["itemId"]
     replication_key = None
     schema_filepath = SCHEMAS_DIR / "finding_item.json"
 
     def __init__(
         self,
-        verb: str,
         *args,
-        data: dict | None = None,
-        max_pages: int | None = None,
+        searches: list,
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
-        self.verb = verb
-        self.data = data or {}
-        self.max_pages = max_pages or 100
+        self.searches = searches
         self._api = None
 
     @property
@@ -69,11 +66,15 @@ class FindingStream(eBayStream):
         return items
 
     def get_records(self, context: dict | None):
-        items = self.get_all_items(
-            client=self.client,
-            api=self.api,
-            verb=self.verb,
-            data=self.data,
-            max_pages=self.max_pages,
-        )
-        return (self.response_to_dict(item) for item in items)
+        for search in self.searches:
+            items = self.get_all_items(
+                client=self.client,
+                api=self.api,
+                verb=search["verb"],
+                data=search["data"],
+                max_pages=search.get("max_pages", 100),
+            )
+            for item in items:
+                record = self.response_to_dict(item)
+                record["search_id"] = search["name"]
+                yield record

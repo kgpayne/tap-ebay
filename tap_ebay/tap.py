@@ -39,17 +39,11 @@ class TapeBay(Tap):
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
         client = eBayClient(app_id=self.config["app_id"])
-        return [
-            FindingStream(
-                tap=self,
-                name=search["name"],
-                client=client,
-                verb=search["verb"],
-                data=search.get("data", {}),
-                max_pages=search["max_pages"],
-            )
-            for search in self.config.get("searches", [])
-        ]
+        return (
+            [FindingStream(tap=self, client=client, searches=self.config["searches"])]
+            if "searches" in self.config
+            else []
+        )
 
 
 if __name__ == "__main__":
