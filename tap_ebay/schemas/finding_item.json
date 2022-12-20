@@ -1,0 +1,333 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "itemId": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "globalId": {
+      "type": "string"
+    },
+    "primaryCategory": {
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "string"
+        },
+        "categoryName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "categoryId",
+        "categoryName"
+      ]
+    },
+    "galleryURL": {
+      "type": "string"
+    },
+    "viewItemURL": {
+      "type": "string"
+    },
+    "autoPay": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "shippingInfo": {
+      "type": "object",
+      "properties": {
+        "shippingServiceCost": {
+          "type": "object",
+          "properties": {
+            "_currencyId": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_currencyId",
+            "value"
+          ]
+        },
+        "shippingType": {
+          "type": "string"
+        },
+        "shipToLocations": {
+          "type": "string"
+        },
+        "expeditedShipping": {
+          "type": "string"
+        },
+        "oneDayShippingAvailable": {
+          "type": "string"
+        },
+        "handlingTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "expeditedShipping",
+        "handlingTime",
+        "oneDayShippingAvailable",
+        "shipToLocations",
+        "shippingType"
+      ]
+    },
+    "sellingStatus": {
+      "type": "object",
+      "properties": {
+        "currentPrice": {
+          "type": "object",
+          "properties": {
+            "_currencyId": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_currencyId",
+            "value"
+          ]
+        },
+        "convertedCurrentPrice": {
+          "type": "object",
+          "properties": {
+            "_currencyId": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_currencyId",
+            "value"
+          ]
+        },
+        "sellingState": {
+          "type": "string"
+        },
+        "timeLeft": {
+          "type": "string"
+        },
+        "bidCount": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "convertedCurrentPrice",
+        "currentPrice",
+        "sellingState",
+        "timeLeft"
+      ]
+    },
+    "listingInfo": {
+      "type": "object",
+      "properties": {
+        "bestOfferEnabled": {
+          "type": "string"
+        },
+        "buyItNowAvailable": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "listingType": {
+          "type": "string"
+        },
+        "gift": {
+          "type": "string"
+        },
+        "watchCount": {
+          "type": "string"
+        },
+        "buyItNowPrice": {
+          "type": "object",
+          "properties": {
+            "_currencyId": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_currencyId",
+            "value"
+          ]
+        },
+        "convertedBuyItNowPrice": {
+          "type": "object",
+          "properties": {
+            "_currencyId": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_currencyId",
+            "value"
+          ]
+        }
+      },
+      "required": [
+        "bestOfferEnabled",
+        "buyItNowAvailable",
+        "endTime",
+        "gift",
+        "listingType",
+        "startTime"
+      ]
+    },
+    "returnsAccepted": {
+      "type": "string"
+    },
+    "condition": {
+      "type": "object",
+      "properties": {
+        "conditionId": {
+          "type": "string"
+        },
+        "conditionDisplayName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "conditionDisplayName",
+        "conditionId"
+      ]
+    },
+    "isMultiVariationListing": {
+      "type": "string"
+    },
+    "topRatedListing": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    },
+    "productId": {
+      "type": "object",
+      "properties": {
+        "_type": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "_type",
+        "value"
+      ]
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "discountPriceInfo": {
+      "type": "object",
+      "properties": {
+        "originalRetailPrice": {
+          "type": "object",
+          "properties": {
+            "_currencyId": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "_currencyId",
+            "value"
+          ]
+        },
+        "pricingTreatment": {
+          "type": "string"
+        },
+        "soldOnEbay": {
+          "type": "string"
+        },
+        "soldOffEbay": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "pricingTreatment",
+        "soldOffEbay",
+        "soldOnEbay"
+      ]
+    },
+    "paymentMethod": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "charityId": {
+      "type": "string"
+    },
+    "galleryPlusPictureURL": {
+      "type": "string"
+    },
+    "secondaryCategory": {
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "string"
+        },
+        "categoryName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "categoryId",
+        "categoryName"
+      ]
+    }
+  },
+  "required": [
+    "autoPay",
+    "country",
+    "galleryURL",
+    "globalId",
+    "isMultiVariationListing",
+    "itemId",
+    "listingInfo",
+    "location",
+    "primaryCategory",
+    "returnsAccepted",
+    "sellingStatus",
+    "shippingInfo",
+    "title",
+    "topRatedListing",
+    "viewItemURL"
+  ]
+}

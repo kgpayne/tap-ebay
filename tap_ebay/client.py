@@ -1,24 +1,44 @@
 """Custom client handling, including eBayStream base class."""
 
-import requests
-from pathlib import Path
-from typing import Any, Dict, Optional, Union, List, Iterable
+from __future__ import annotations
 
+import logging
+from os import PathLike
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Union
+
+import singer_sdk._singerlib as singer
+from ebaysdk.exception import ConnectionError
+from ebaysdk.finding import Connection as Finding
 from singer_sdk.streams import Stream
+
+logger = logging.getLogger(__name__)
+
+
+class eBayClient:
+    def __init__(self, app_id):
+        self.app_id = app_id
+
+    def get_finding_api(self):
+        return Finding(appid=self.app_id, config_file=None)
+
+    def execute(self, api, verb, data: dict = {}):
+        try:
+            return api.execute(verb, data)
+        except ConnectionError as e:
+            logger.error(f"Connection failed: {e}\n{e.response.dict()}")
+            raise e
 
 
 class eBayStream(Stream):
     """Stream class for eBay streams."""
 
-    def get_records(self, context: Optional[dict]) -> Iterable[dict]:
-        """Return a generator of record-type dictionary objects.
-
-        The optional `context` argument is used to identify a specific slice of the
-        stream if partitioning is required for the stream. Most implementations do not
-        require partitioning and should ignore the `context` argument.
-        """
-        # TODO: Write logic to extract data from the upstream source.
-        # records = mysource.getall()
-        # for record in records:
-        #     yield record.to_dict()
-        raise NotImplementedError("The method is not yet implemented (TODO)")
+    def __init__(
+        self,
+        tap,
+        client,
+        schema: str | PathLike | dict[str, Any] | singer.Schema | None = None,
+        name: str | None = None,
+    ):
+        super().__init__(tap=tap, schema=schema, name=name)
+        self.client = client

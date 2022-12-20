@@ -10,10 +10,11 @@ keywords = [
 license = "Apache 2.0"
 
 [tool.poetry.dependencies]
-python = "<3.11,>=3.7.1"
+python = ">=3.8,<3.11"
 requests = "^2.25.1"
 singer-sdk = { version="^0.14.0"}
 fs-s3fs = { version = "^1.1.1", optional = true}
+ebaysdk = "^2.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -27,6 +28,10 @@ isort = "^5.10.1"
 
 [tool.poetry.extras]
 s3 = ["fs-s3fs"]
+
+[tool.poetry.group.dev.dependencies]
+genson = "^1.2.2"
+ipykernel = "^6.19.3"
 
 [tool.isort]
 profile = "black"
