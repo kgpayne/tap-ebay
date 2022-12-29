@@ -3,13 +3,37 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from os import PathLike
 from pathlib import Path
+from typing import Any
 
+import singer_sdk._singerlib as singer
 from ebaysdk.response import ResponseDataObject
-
-from tap_ebay.client import eBayStream
+from singer_sdk.streams import Stream
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
+
+
+class eBayStream(Stream):
+    """Stream class for eBay streams."""
+
+    def __init__(
+        self,
+        tap,
+        client,
+        schema: str | PathLike | dict[str, Any] | singer.Schema | None = None,
+        name: str | None = None,
+    ):
+        super().__init__(tap=tap, schema=schema, name=name)
+        self.client = client
+
+    @classmethod
+    def response_to_dict(cls, obj):
+        if isinstance(obj, ResponseDataObject):
+            obj = obj.__dict__
+            for key, value in obj.items():
+                obj[key] = cls.response_to_dict(value)
+        return obj
 
 
 class FindingStream(eBayStream):
@@ -35,14 +59,6 @@ class FindingStream(eBayStream):
         if self._api is None:
             self._api = self.client.get_finding_api()
         return self._api
-
-    @classmethod
-    def response_to_dict(cls, obj):
-        if isinstance(obj, ResponseDataObject):
-            obj = obj.__dict__
-            for key, value in obj.items():
-                obj[key] = cls.response_to_dict(value)
-        return obj
 
     @staticmethod
     def get_all_items(client, api, verb, data, max_pages=100):
@@ -78,3 +94,47 @@ class FindingStream(eBayStream):
                 record = self.response_to_dict(item)
                 record["search_id"] = search["name"]
                 yield record
+
+
+class ItemStatusStream(eBayStream):
+
+    name = "item_status"
+    primary_keys = ["itemId"]
+    replication_key = None
+    schema_filepath = SCHEMAS_DIR / "item_status.json"
+
+    def __init__(
+        self,
+        *args,
+        items: list,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.items = items
+        self._api = None
+
+    @property
+    def api(self):
+        if self._api is None:
+            self._api = self.client.get_shopping_api()
+        return self._api
+
+    @staticmethod
+    def get_item_status(client, api, verb, data, max_pages=100):
+        params = deepcopy(data)
+        params["paginationInput"] = {"entriesPerPage": 100}
+        response = client.execute(api, verb, params)
+        if hasattr(response.reply, "Item"):
+            return response.reply.Item
+
+    def get_records(self, context: dict | None):
+        for item in self.items:
+            item_status = self.get_item_status(
+                client=self.client,
+                api=self.api,
+                verb="GetItemStatus",
+                data={"ItemID": item},
+            )
+            if item_status:
+                item_status_dict = self.response_to_dict(item_status)
+                yield item_status_dict

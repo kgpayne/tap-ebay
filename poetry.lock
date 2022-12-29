@@ -237,10 +237,17 @@ description = "eBay SDK for Python"
 category = "main"
 optional = false
 python-versions = "*"
+develop = false
 
 [package.dependencies]
 lxml = "*"
 requests = "*"
+
+[package.source]
+type = "git"
+url = "https://github.com/timotheus/ebaysdk-python.git"
+reference = "HEAD"
+resolved_reference = "7ef8ba432332657258038ce86c6da2b02da0681f"
 
 [[package]]
 name = "entrypoints"
@@ -1235,7 +1242,7 @@ s3 = ["fs-s3fs"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "f436395e17866a0bfd2fa7d05754828301c4e43020639e8b9e01b09d76877e44"
+content-hash = "8fd9a24cea303aeca305128cec428dcc9ce077668031a71b911f15dbeacadf75"
 
 [metadata.files]
 appdirs = [
@@ -1419,10 +1426,7 @@ distlib = [
     {file = "distlib-0.3.6-py2.py3-none-any.whl", hash = "sha256:f35c4b692542ca110de7ef0bea44d73981caeb34ca0b9b6b2e6d7790dda8f80e"},
     {file = "distlib-0.3.6.tar.gz", hash = "sha256:14bad2d9b04d3a36127ac97f30b12a19268f211063d8f8ee4f47108896e11b46"},
 ]
-ebaysdk = [
-    {file = "ebaysdk-2.2.0-py3-none-any.whl", hash = "sha256:e43bb4fd36494170bf42bc7fe5686c43103ec9bda235c4e716f3ecb7b0688d7d"},
-    {file = "ebaysdk-2.2.0.tar.gz", hash = "sha256:2eb875d706b481f59ca8dd3074538df7e5196814f9ce12d0ef84690343a9c7f3"},
-]
+ebaysdk = []
 entrypoints = [
     {file = "entrypoints-0.4-py3-none-any.whl", hash = "sha256:f174b5ff827504fd3cd97cc3f8649f3693f51538c7e4bdf3ef002c8429d42f9f"},
     {file = "entrypoints-0.4.tar.gz", hash = "sha256:b706eddaa9218a19ebcd67b56818f05bb27589b1ca9e8d797b74affad4ccacd4"},
