@@ -66,13 +66,16 @@ class eBayClient:
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
 
-    def get_finding_api(self):
-        return Finding(appid=self.app_id, config_file=None)
+    def get_finding_api(self, site_id="EBAY-US"):
+        return Finding(appid=self.app_id, config_file=None, siteid=site_id)
 
-    def get_shopping_api(self):
+    def get_shopping_api(self, site_id="EBAY-US"):
         token = self.get_shopping_api_token()
         return Shopping(
-            appid=self.app_id, iaf_token=token.access_token, config_file=None
+            appid=self.app_id,
+            iaf_token=token.access_token,
+            config_file=None,
+            siteid=site_id,
         )
 
     def execute(self, api, verb, data: dict = {}):

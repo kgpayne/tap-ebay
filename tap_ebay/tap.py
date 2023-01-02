@@ -48,6 +48,9 @@ class TapeBay(Tap):
                     th.Property(
                         "max_pages", th.IntegerType, required=False, default=100
                     ),
+                    th.Property(
+                        "site_global_ids", th.ArrayType(th.StringType), required=False
+                    ),
                 )
             ),
         ),
@@ -79,25 +82,25 @@ class TapeBay(Tap):
             else []
         )
         # Item Status Stream
+        items = []
         if "item_status_file_path" in self.config:
             # assume file path is file
             with open(self.config["item_status_file_path"]) as f:
                 records = csv.reader(f)
-                items = [i[0] for i in list(records)[1:]]
+                items = [{"id": i[0], "site_id": i[1]} for i in list(records)[1:]]
 
         if "item_status_file_pattern" in self.config:
             files = glob.glob(
                 self.config["item_status_file_pattern"],
             )
-            items = []
             for file in files:
                 with open(file) as f:
                     records = csv.reader(f)
-                    items.extend([i[0] for i in list(records)[1:]])
+                    items.extend(
+                        [{"id": i[0], "site_id": i[1]} for i in list(records)[1:]]
+                    )
 
-        streams.append(
-            ItemStatusStream(tap=self, client=client, items=list(set(items)))
-        )
+        streams.append(ItemStatusStream(tap=self, client=client, items=items))
 
         return streams
 

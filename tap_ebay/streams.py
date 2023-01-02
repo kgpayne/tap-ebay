@@ -54,11 +54,8 @@ class FindingStream(eBayStream):
         self.searches = searches
         self._api = None
 
-    @property
-    def api(self):
-        if self._api is None:
-            self._api = self.client.get_finding_api()
-        return self._api
+    def get_api(self, site_id="EBAY-US"):
+        return self.client.get_finding_api(site_id=site_id)
 
     @staticmethod
     def get_all_items(client, api, verb, data, max_pages=100):
@@ -83,17 +80,19 @@ class FindingStream(eBayStream):
 
     def get_records(self, context: dict | None):
         for search in self.searches:
-            items = self.get_all_items(
-                client=self.client,
-                api=self.api,
-                verb=search["verb"],
-                data=search["data"],
-                max_pages=search.get("max_pages", 100),
-            )
-            for item in items:
-                record = self.response_to_dict(item)
-                record["search_id"] = search["name"]
-                yield record
+            for site_id in search.get("site_global_ids", ["EBAY-US"]):
+                api = self.get_api(site_id=site_id)
+                items = self.get_all_items(
+                    client=self.client,
+                    api=api,
+                    verb=search["verb"],
+                    data=search["data"],
+                    max_pages=search.get("max_pages", 100),
+                )
+                for item in items:
+                    record = self.response_to_dict(item)
+                    record["search_id"] = search["name"]
+                    yield record
 
 
 class ItemStatusStream(eBayStream):
@@ -106,18 +105,14 @@ class ItemStatusStream(eBayStream):
     def __init__(
         self,
         *args,
-        items: list,
+        items: list[dict],
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self.items = items
-        self._api = None
 
-    @property
-    def api(self):
-        if self._api is None:
-            self._api = self.client.get_shopping_api()
-        return self._api
+    def get_api(self, site_id="EBAY-US"):
+        return self.client.get_shopping_api(site_id=site_id)
 
     @staticmethod
     def get_item_status(client, api, verb, data, max_pages=100):
@@ -129,11 +124,12 @@ class ItemStatusStream(eBayStream):
 
     def get_records(self, context: dict | None):
         for item in self.items:
+            api = self.get_api(site_id=item["site_id"])
             item_status = self.get_item_status(
                 client=self.client,
-                api=self.api,
+                api=api,
                 verb="GetItemStatus",
-                data={"ItemID": item},
+                data={"ItemID": item["id"]},
             )
             if item_status:
                 item_status_dict = self.response_to_dict(item_status)
