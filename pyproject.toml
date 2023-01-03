@@ -12,9 +12,9 @@ license = "Apache 2.0"
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
 requests = "^2.25.1"
-singer-sdk = { version="^0.14.0"}
-fs-s3fs = { version = "^1.1.1", optional = true}
-ebaysdk = "^2.2.0"
+singer-sdk = {version="^0.14.0"}
+fs-s3fs = {version = "^1.1.1", optional = true}
+ebaysdk = {git = "https://github.com/timotheus/ebaysdk-python.git", rev = "7ef8ba4"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

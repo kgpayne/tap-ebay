@@ -9,7 +9,7 @@
       "type": "python",
       "request": "launch",
       "module": "tap_ebay.tap",
-      "justMyCode": false,
+      "justMyCode": true,
       "args": ["--config", ".secrets/config.json"]
     }
   ]

@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "ItemID": {
+      "type": "string"
+    },
+    "EndTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "BidCount": {
+      "type": "string"
+    },
+    "ConvertedCurrentPrice": {
+      "type": "object",
+      "properties": {
+        "_currencyID": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": ["_currencyId", "value"]
+    },
+    "ListingStatus": {
+      "type": "string"
+    },
+    "TimeLeft": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ItemID",
+    "EndTime",
+    "BidCount",
+    "ConvertedCurrentPrice",
+    "ListingStatus",
+    "TimeLeft"
+  ]
+}
