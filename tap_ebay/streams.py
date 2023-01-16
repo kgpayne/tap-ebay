@@ -40,9 +40,9 @@ class FindingStream(eBayStream):
     """Define custom stream."""
 
     name = "finding_items"
-    primary_keys = ["itemId"]
-    replication_key = None
     schema_filepath = SCHEMAS_DIR / "finding_item.json"
+    primary_keys = ["search_id", "itemId"]
+    replication_key = None
 
     def __init__(
         self,
